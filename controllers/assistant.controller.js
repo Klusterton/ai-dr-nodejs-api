@@ -1,4 +1,5 @@
 import { openai } from "../app.js"
+import User from "../models/user.model.js"
 import Assistant from "../models/assistant.model.js"
 import { GenerateAssistant, GetAllAssistants, GetMessagesInThread, PickAnAssistant, RunThread } from "../services/openai.js"
 
@@ -24,7 +25,6 @@ export async function ShowAllAssistants(req, res) {
 }
 
 
-
 export async function AskAssitant(req, res) {
     let aiResponse = null
     try {
@@ -38,6 +38,11 @@ export async function AskAssitant(req, res) {
                 ]
             }
         })
+        // check the user database for the thread id,
+        // if it does not exist,
+        // store the thread id and the prompt to the user database
+        // else do nothing
+
         res.status(200).json({ message: "Conversation started", data: aiResponse })
     } catch (error) {
         res.status(401).json({ message: "Error while prompting assistant: " + error.message })
