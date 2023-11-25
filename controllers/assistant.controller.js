@@ -38,20 +38,28 @@ export async function AskAssitant(req, res) {
                 ]
             }
         })
-        
-        const aiConsultations = req.user.aiConsultations
-        const thread = aiConsultations.find(thread => thread.id === aiResponse.thread_id)
-        if (!thread) {
-            const newThread = {title: req.body.prompt, id: aiResponse.thread_id}
-            const user = await User.findById(req.user._id)
-            user.aiConsultations.push(newThread)
-            await user.save()
-        }
+
+        // const aiConsultations = req.user.aiConsultations
+        // const thread = aiConsultations.find(thread => thread.id === aiResponse.thread_id)
+        const newThread = {title: req.body.prompt, id: aiResponse.thread_id}
+        const user = await User.findById(req.user._id)
+        user.aiConsultations.push(newThread)
+        await user.save()
 
         res.status(200).json({ message: "Conversation started", data: aiResponse })
     } catch (error) {
         res.status(401).json({ message: "Error while prompting assistant: " + error.message })
     }
+}
+
+export async function getAllMessagesInThread(req, res) {
+    try {
+        const messagesInThread = await GetMessagesInThread(req.body.id)
+        res.status(200).json({message: "Retrieved all messages in thread", data: messagesInThread})
+    } catch (error) {
+        res.status(401).json({ message: "Error while prompting assistant: " + error.message })   
+    }
+    
 }
 
 export async function LoadMessages(req, res) {
