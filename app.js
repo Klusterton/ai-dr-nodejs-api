@@ -4,14 +4,18 @@ dotenv.config()
 import cors from 'cors'
 import authRoutes from './routes/auth.route.js'
 import userRoutes from './routes/user.route.js'
+import assistantRoutes from "./routes/assistant.route.js"
 import morgan from 'morgan'
 import { connectToDatabase } from './services/db.js'
+import OpenAI from 'openai'
 
 /**
  * DECLARABLES
  */
 export const app = express()
-
+export const openai = new OpenAI({
+    apiKey: process.env.OPEN_AI_KEY
+})
 /**
  * MIDDLEWARES
  */
@@ -24,5 +28,6 @@ app.use(morgan('dev'))
  */
 app.use("/auth", authRoutes)
 app.use("/user", userRoutes)
+app.use("/assistant", assistantRoutes)
 
 connectToDatabase()

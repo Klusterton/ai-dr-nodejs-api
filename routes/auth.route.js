@@ -10,9 +10,7 @@ router
         res.status(200).json({ msg: "auth LOGIN!" })
     })
     .post("/login", (req, res) => {
-        passport.use(new LocalStrategy((username, password, cb) => {
-
-        }))
+        // login algo
     })
 
 
