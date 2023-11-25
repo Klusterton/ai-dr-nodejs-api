@@ -2,7 +2,6 @@
 
 Here resides the NodeJS backend for AI Doctor
 
-
 ## Run This App Locally
 
 Running this app locally in development mode
