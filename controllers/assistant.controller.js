@@ -38,10 +38,15 @@ export async function AskAssitant(req, res) {
                 ]
             }
         })
-        // check the user database for the thread id,
-        // if it does not exist,
-        // store the thread id and the prompt to the user database
-        // else do nothing
+        
+        const aiConsultations = req.user.aiConsultations
+        const thread = aiConsultations.find(thread => thread.id === aiResponse.thread_id)
+        if (!thread) {
+            const newThread = {title: req.body.prompt, id: aiResponse.thread_id}
+            const user = await User.findById(req.user._id)
+            user.aiConsultations.push(newThread)
+            await user.save()
+        }
 
         res.status(200).json({ message: "Conversation started", data: aiResponse })
     } catch (error) {
