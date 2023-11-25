@@ -3,9 +3,17 @@ import { Schema, model } from "mongoose";
 
 
 const UserSchema = new Schema({
-    username: {
+    googleId: {
+        type: String,
+        unique: true,
+    },
+    name: {
         type: String,
         required: true,
+        trim: true,
+    },
+    username: {
+        type: String,
         unique: true,
         trim: true
     },
@@ -16,7 +24,6 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        required: true,
         trim: true
     },
     aiConsultations: {

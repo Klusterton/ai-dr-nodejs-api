@@ -4,13 +4,16 @@ import jwt from 'jsonwebtoken'
 
 export const tokenExtractor = (request, response, next) => {
   const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('bearer ')) {
-    request.token = authorization.replace('bearer ', ''); // Attach the token to the request object
+  if (authorization && authorization.startsWith('Bearer ')) {
+    request.token = authorization.replace('Bearer ', ''); // Attach the token to the request object
   }
   next()
 }
 
 export const userExtractor = async (request, response, next) => {
+  if (req.isAuthenticated()) { 
+    return next()
+  }
   const decodedToken = jwt.verify(request.token, process.env.SECRET_KEY)
     if (!decodedToken.id) {
       return response.status(401).json({ error: 'token invalid' })
@@ -29,7 +32,7 @@ export const errorHandler = (error, request, response, next) => {
   errorLogger(error.name)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({ error: 'malformatted id' })
+    return response.status(400).send({ error: error.message })
   } else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   } else if (error.name === 'SyntaxError') {

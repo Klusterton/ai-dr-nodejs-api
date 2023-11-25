@@ -8,6 +8,10 @@ import userRoutes from './routes/user.route.js'
 import morgan from 'morgan'
 import { connectToDatabase } from './services/db.js'
 import { errorHandler, tokenExtractor, unknownEndpoint } from './utils/middleware.js'
+import './passportConfig.js'
+
+import session from 'express-session'
+
 
 
 /**
@@ -15,18 +19,16 @@ import { errorHandler, tokenExtractor, unknownEndpoint } from './utils/middlewar
  */
 export const app = express()
 
+
 /**
  * MIDDLEWARES
  */
 
 app.use(express.json())
+app.use(session({ secret: process.env.SECRET_KEY, resave: false, saveUninitialized: false, name: 'token' }));
 app.use(cors())
 app.use(morgan('dev'))
 app.use(tokenExtractor)
-
-
-
-
 
 /**
  * ROUTE CONFIGURATION
