@@ -3,10 +3,10 @@ import { Router } from 'express'
 
 const router = Router()
 
-import { LoginUser } from '../controllers/user.controller.js'
+import { LoginUser, LogoutUser } from '../controllers/user.controller.js'
 
 router.post('/login', LoginUser)
-router.post('/logout', LoginUser)
+router.post('/logout', LogoutUser)
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
 router.get('/google/callback',  passport.authenticate('google', { failureRedirect: '/auth' }),
 (req, res) => {
