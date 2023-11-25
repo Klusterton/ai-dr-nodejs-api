@@ -39,11 +39,10 @@ export async function AskAssitant(req, res) {
             }
         })
 
-        // const aiConsultations = req.user.aiConsultations
-        // const thread = aiConsultations.find(thread => thread.id === aiResponse.thread_id)
         const newThread = {title: req.body.prompt, id: aiResponse.thread_id}
         const user = await User.findById(req.user._id)
         user.aiConsultations.push(newThread)
+        req.user.aiConsultations.push(newThread)
         await user.save()
 
         res.status(200).json({ message: "Conversation started", data: aiResponse })
@@ -60,6 +59,15 @@ export async function getAllMessagesInThread(req, res) {
         res.status(401).json({ message: "Error while prompting assistant: " + error.message })   
     }
     
+}
+
+export async function getAllThreads(req, res) {
+    try {
+        const userThreads = req.user.aiConsultations
+        res.status(200).json({message: "Fetched all threads", data: userThreads})
+    } catch (error) {
+        res.status(401).json({ message: "Error while fetching threads: " + error.message })
+    }
 }
 
 export async function LoadMessages(req, res) {
