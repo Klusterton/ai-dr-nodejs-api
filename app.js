@@ -8,7 +8,7 @@ import userRoutes from './routes/user.route.js'
 import assistantRoutes from "./routes/assistant.route.js"
 import morgan from 'morgan'
 import { connectToDatabase } from './services/db.js'
-import { errorHandler, tokenExtractor, unknownEndpoint } from './utils/middleware.js'
+import { errorHandler, tokenExtractor, unknownEndpoint, userExtractor } from './utils/middleware.js'
 import './passportConfig.js'
 
 import session from 'express-session'
@@ -40,10 +40,10 @@ app.use(tokenExtractor)
 app.use("/auth", authRoutes)
 app.use("/api/users", userRoutes)
 
+app.use("/assistant", userExtractor)
+app.use("/assistant", assistantRoutes)
+
 app.use(unknownEndpoint)
 app.use(errorHandler)
-
-
-app.use("/assistant", assistantRoutes)
 
 connectToDatabase()
