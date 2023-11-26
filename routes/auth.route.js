@@ -10,8 +10,7 @@ router.post('/logout', LogoutUser)
 router.get('/google', passport.authenticate('google', {scope: ['profile', 'email']}))
 router.get('/google/callback',  passport.authenticate('google', { failureRedirect: '/auth' }),
 (req, res) => {
-  
-  res.redirect('https://ai-doctor.com');
+  res.redirect('https://medix-navy.vercel.app');
 })
 router.get('/', (req, res) => {
     res.json({message: "auth"})
