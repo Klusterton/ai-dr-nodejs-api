@@ -18,8 +18,8 @@ export default passport.use(new GoogleStrategy({
         return done(null, user);
       } else {
         const newUser = new User({ email: profile.emails[0].value, googleId: profile.id, name: profile.displayName })
-        await newUser.save()
-        return done(null, newUser);
+        const user = await newUser.save()
+        return done(null, user);
       }
     } catch (err) {
       return done(err, null);
