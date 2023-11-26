@@ -1,4 +1,5 @@
 import { openai } from "../app.js"
+import User from "../models/user.model.js"
 import Assistant from "../models/assistant.model.js"
 import { GenerateAssistant, GetAllAssistants, GetMessagesInThread, PickAnAssistant, RunThread } from "../services/openai.js"
 
@@ -24,7 +25,6 @@ export async function ShowAllAssistants(req, res) {
 }
 
 
-
 export async function AskAssitant(req, res) {
     let aiResponse = null
     try {
@@ -38,9 +38,35 @@ export async function AskAssitant(req, res) {
                 ]
             }
         })
-        res.status(200).json({ message: "Conversation started", data: aiResponse })
+
+        const newThread = {title: req.body.prompt, id: aiResponse.thread_id, created_at: aiResponse.created_at}
+        const user = await User.findById(req.user._id)
+        user.aiConsultations.push(newThread)
+        await user.save()
+
+        res.status(200).json({ message: "Conversation started", data: aiResponse.thread_id })
     } catch (error) {
         res.status(401).json({ message: "Error while prompting assistant: " + error.message })
+    }
+}
+
+export async function getAllMessagesInThread(req, res) {
+    try {
+        const messagesInThread = await GetMessagesInThread(req.body.id)
+        res.status(200).json({message: "Retrieved all messages in thread", data: messagesInThread})
+    } catch (error) {
+        res.status(401).json({ message: "Error while prompting assistant: " + error.message })   
+    }
+    
+}
+
+
+export async function getAllThreads(req, res) {
+    try {
+        const userThreads = req.user.aiConsultations.sort((a, b) => b.created_at - a.created_at)
+        res.status(200).json({message: "Fetched all threads", data: userThreads})
+    } catch (error) {
+        res.status(401).json({ message: "Error while fetching threads: " + error.message })
     }
 }
 
