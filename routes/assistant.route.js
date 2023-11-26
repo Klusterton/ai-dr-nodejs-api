@@ -6,7 +6,8 @@ const router = Router()
 router
     .get("/", ShowAllAssistants)
     .post("/chat", AskAssitant)
-    .post("/threads", getAllMessagesInThread)
+    .post("/threads", LoadMessages)
+    .post("/messages", getAllMessagesInThread)
     .post("/history", getAllThreads)
     .post("/prompt", UpdateThreadWithMessage)
 
