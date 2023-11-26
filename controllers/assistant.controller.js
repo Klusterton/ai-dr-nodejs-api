@@ -44,7 +44,7 @@ export async function AskAssitant(req, res) {
         user.aiConsultations.push(newThread)
         await user.save()
 
-        res.status(200).json({ message: "Conversation started", data: aiResponse })
+        res.status(200).json({ message: "Conversation started", data: aiResponse.thread_id })
     } catch (error) {
         res.status(401).json({ message: "Error while prompting assistant: " + error.message })
     }
