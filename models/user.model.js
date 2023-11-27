@@ -5,17 +5,12 @@ import { Schema, model } from "mongoose";
 const UserSchema = new Schema({
     googleId: {
         type: String,
-        unique: true,
+        unique: false,
     },
     name: {
         type: String,
         required: true,
         trim: true,
-    },
-    username: {
-        type: String,
-        unique: true,
-        trim: true
     },
     email: {
         type: String,
