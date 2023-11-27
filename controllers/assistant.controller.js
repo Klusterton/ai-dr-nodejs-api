@@ -39,10 +39,10 @@ export async function AskAssitant(req, res) {
             }
         })
 
-        const newThread = {title: req.body.prompt, id: aiResponse.thread_id, created_at: aiResponse.created_at}
-        const user = await User.findById(req.user._id)
-        user.aiConsultations.push(newThread)
-        await user.save()
+        // const newThread = {title: req.body.prompt, id: aiResponse.thread_id, created_at: aiResponse.created_at}
+        // const user = await User.findById(req.user._id)
+        // user.aiConsultations.push(newThread)
+        // await user.save()
 
         res.status(200).json({ message: "Conversation started", data: aiResponse.thread_id })
     } catch (error) {
@@ -53,18 +53,18 @@ export async function AskAssitant(req, res) {
 export async function getAllMessagesInThread(req, res) {
     try {
         const messagesInThread = await GetMessagesInThread(req.body.id)
-        res.status(200).json({message: "Retrieved all messages in thread", data: messagesInThread})
+        res.status(200).json({ message: "Retrieved all messages in thread", data: messagesInThread })
     } catch (error) {
-        res.status(401).json({ message: "Error while prompting assistant: " + error.message })   
+        res.status(401).json({ message: "Error while prompting assistant: " + error.message })
     }
-    
+
 }
 
 
 export async function getAllThreads(req, res) {
     try {
         const userThreads = req.user.aiConsultations.sort((a, b) => b.created_at - a.created_at)
-        res.status(200).json({message: "Fetched all threads", data: userThreads})
+        res.status(200).json({ message: "Fetched all threads", data: userThreads })
     } catch (error) {
         res.status(401).json({ message: "Error while fetching threads: " + error.message })
     }
