@@ -38,7 +38,7 @@ app.use(tokenExtractor)
  * ROUTE CONFIGURATION
  */
 app.use("/auth", authRoutes)
-app.use("/api/users", userRoutes)
+app.use("/users", userRoutes)
 
 app.use("/assistant", userExtractor)
 app.use("/assistant", assistantRoutes)
