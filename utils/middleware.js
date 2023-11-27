@@ -11,13 +11,13 @@ export const tokenExtractor = (request, response, next) => {
 }
 
 export const userExtractor = async (request, response, next) => {
-  if (req.isAuthenticated && req.isAuthenticated()) { 
+  if (req.isAuthenticated && req.isAuthenticated()) {
     return next()
   }
   const decodedToken = jwt.verify(request.token, process.env.SECRET_KEY)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    }
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
   const user = await User.findById(decodedToken.id)
   request.user = user
   next()
@@ -32,15 +32,15 @@ export const errorHandler = (error, request, response, next) => {
   errorLogger(error.name)
 
   if (error.name === 'CastError') {
-    return response.status(400).send({ error: error.message })
+    return response.status(400).send({ errorType: 'Cast Error', error: error.message })
   } else if (error.name === 'ValidationError') {
-    return response.status(400).json({ error: error.message })
+    return response.status(400).json({ errorType: 'Validate Error', error: error.message })
   } else if (error.name === 'SyntaxError') {
-    return response.status(400).json({ error: error.message })
-  } else if (error.name ===  'JsonWebTokenError') {
-    return response.status(401).json({ error: error.message })
+    return response.status(400).json({ errorType: 'Syntax Error', error: error.message })
+  } else if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({ errorType: 'Json Error', error: error.message })
   } else {
-    return response.status(500).json({error: error.message})
+    return response.status(500).json({ errorType: 'Unknown Error', error: error.message })
   }
 
 }

@@ -40,7 +40,7 @@ app.use(tokenExtractor)
 app.use("/auth", authRoutes)
 app.use("/users", userRoutes)
 
-app.use("/assistant", userExtractor)
+
 app.use("/assistant", assistantRoutes)
 
 app.use(unknownEndpoint)
