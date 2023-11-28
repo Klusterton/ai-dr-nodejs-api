@@ -5,7 +5,6 @@ import { Schema, model } from "mongoose";
 const UserSchema = new Schema({
     googleId: {
         type: String,
-        unique: false,
     },
     name: {
         type: String,
@@ -19,7 +18,8 @@ const UserSchema = new Schema({
     },
     password: {
         type: String,
-        trim: true
+        trim: true,
+        required: true
     },
     aiConsultations: {
         type: [],
